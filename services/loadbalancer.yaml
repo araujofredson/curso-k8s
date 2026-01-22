@@ -12,3 +12,5 @@ spec:
   selector:
     app: nginx
   type: LoadBalancer
+  internalTrafficPolicy: Local # Evita que o balançador de tráfego distribua o tráfego interno para outras replicas do pod em outros node.
+  externalTrafficPolicy: Cluster # Distribui o tráfego de entrada entre todas as replicas do pod, independentemente do node em que estão localizadas.
