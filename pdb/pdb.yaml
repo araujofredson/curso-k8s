@@ -7,3 +7,5 @@ spec:
   selector:
     matchLabels:
       app: nginx
+
+# define um limite de réplicas de um Pod que podem ficar indisponíveis simultaneamente durante atualizações de nós (node drain) ou manutenções planejadas.
