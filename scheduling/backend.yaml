@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: backend
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      affinity:
+        podAffinity: # garante que o backend fique no mesmo node que o database
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - database
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - image: alpine
+        name: backend
+        commands:
+        - sleep
+        - "31536000" # Sleep for 1 year

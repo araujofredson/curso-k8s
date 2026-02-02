@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      tolerations: # permite que os pods sejam agendados em nodes com taints específicos
+        - key: nodegroup
+          operator: Equal
+          value: backend
+          effect: NoSchedule
+      containers:
+      - image: nginx
+        name: nginx
+
+# kubectl taint node worker-1 nodegroup=backend:NoSchedule

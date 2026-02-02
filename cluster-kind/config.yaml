@@ -23,3 +23,5 @@ nodes:
     protocol: TCP
 - role: worker
 # - role: worker
+
+#  kind create cluster --config config.yaml --name cluster --kubeconfig config
