@@ -15,18 +15,33 @@ spec:
         app: nginx
     spec:
       containers:
-      - image: nginx
-        name: nginx
-        env:
-        - name: FOO
-          value: bar
-        - name: ENVIRONMENT
-          value: development
-        readinessProbe:
-          httpGet:
-            path: "/"
-            port: 80
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
         livenessProbe:
           httpGet:
-            path: "/"
+            path: /
             port: 80
+          initialDelaySeconds: 0  # Segundos antes da 1ª verificação após o início (Padrão: 0)
+          periodSeconds: 10       # Frequência da verificação em segundos (Padrão: 10)
+          timeoutSeconds: 1       # Tempo de espera pela resposta antes da falha (Padrão: 1)
+          successThreshold: 1     # Mínimo de sucessos após falha (Padrão: 1, deve ser 1 aqui)
+          failureThreshold: 3     # Tentativas antes de reiniciar o contêiner (Padrão: 3)
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 0  # Segundos antes da 1ª verificação após o início (Padrão: 0)
+          periodSeconds: 10       # Frequência da verificação em segundos (Padrão: 10)
+          timeoutSeconds: 1       # Tempo de espera pela resposta antes da falha (Padrão: 1)
+          successThreshold: 1     # Mínimo de sucessos após falha (Padrão: 1)
+          failureThreshold: 3     # Tentativas antes de remover o Pod do Service (Padrão: 3)
+
+
+
+
+# O Liveness Probe verifica se o contêiner ainda está vivo.
+  # Se falhar, o Kubernetes mata o contêiner e o reinicia.
+# O Readiness Probe verifica se o contêiner está pronto para receber tráfego.
+  # Se falhar, o Pod é removido dos endpoints do Service (LB).

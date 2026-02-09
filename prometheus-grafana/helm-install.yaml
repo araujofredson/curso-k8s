@@ -1,0 +1,53 @@
+
+
+
+
+
+
+### Deploying Prometheus on a Kind cluster using Helm ###
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add stable https://charts.helm.sh/stable
+helm repo update
+
+
+kubectl create namespace monitoring
+
+
+
+helm install kind-prometheus prometheus-community/kube-prometheus-stack \
+  --namespace monitoring \
+  --set prometheus.service.nodePort=30000 \
+  --set prometheus.service.type=NodePort \
+  --set grafana.service.nodePort=31000 \
+  --set grafana.service.type=NodePort \
+  --set alertmanager.service.nodePort=32000 \
+  --set alertmanager.service.type=NodePort \
+  --set prometheus-node-exporter.service.nodePort=32001 \
+  --set prometheus-node-exporter.service.type=NodePort
+
+
+
+senha do grafana: RwyA6CxbruxlY36TTQuiFAnzYCTxhzeCGDMG5EFI
+
+
+
+
+
+# ## Install Prometheus using Helm Charts
+# helm list
+
+# helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+# helm repo update
+# helm install prometheus prometheus-community/prometheus
+
+# # Expose Prometheus Server using NodePort
+# kubectl expose service prometheus-server --type=NodePort --name=prometheus-server-nodeport --target-port=9090
+
+
+# ## Install Grafana using Helm Charts
+# helm repo add grafana https://grafana.github.io/helm-charts
+# helm repo update  
+# helm install grafana stable/grafana 
+# # To get your 'admin' user password in Grafana:
+# kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
