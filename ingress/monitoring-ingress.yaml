@@ -1,0 +1,61 @@
+# 1. Configuração do Ingress (Acesso via grafana.local e prometheus.local)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monitoring-ingress
+  namespace: monitoring
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: grafana.k8s.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus-grafana-lb
+            port:
+              number: 80
+  - host: prometheus.k8s.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus-kube-prometheus-prometheus-lb
+            port:
+              number: 9090
+---
+# 2. Atualização do Service do Grafana para LoadBalancer
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-grafana-lb
+  namespace: monitoring
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/name: grafana
+  ports:
+    - name: http-web 
+      port: 80
+      targetPort: 3000
+---
+# 3. Atualização do Service do Prometheus para LoadBalancer
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-kube-prometheus-prometheus-lb
+  namespace: monitoring
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: prometheus
+    prometheus: prometheus-kube-prometheus-prometheus
+  ports:
+    - name: http-web
+      port: 9090
+      targetPort: 9090
