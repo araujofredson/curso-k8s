@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: social-api
+  labels:
+    app: social-api
+  namespace: homolog  
+spec:
+  type: LoadBalancer
+  selector:
+    app: social-api
+  ports:
+    - port: 8080
+      targetPort: 80
+      protocol: TCP

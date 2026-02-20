@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: social-api
+  namespace: homolog
+  labels:
+    app: social-api
+spec:
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: social-api
+  template:
+    metadata:
+      labels:
+        app: social-api
+    spec:
+      topologySpreadConstraints:                
+        - maxSkew: 1                            
+          topologyKey: kubernetes.io/hostname   
+          whenUnsatisfiable: ScheduleAnyway    
+          labelSelector:                        
+            matchLabels:                      
+              app: social-api 
+      containers:
+        - name: social-api
+          image: httpd
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3

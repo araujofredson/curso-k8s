@@ -55,4 +55,3 @@ spec:
   selector:
     app: nginx-green # Altere para nginx-blue para fazer o tráfego ir para a versão azul
   type: ClusterIP
-  
