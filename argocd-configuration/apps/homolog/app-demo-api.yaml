@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-demo-api
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: app-demo-api=gcr.io/fastech-homolog/app-demo-api
+    argocd-image-updater.argoproj.io/update-strategy: newest-build
+    argocd-image-updater.argoproj.io/write-back-method: git
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:fastech-team/gitops-k8s.git
+    targetRevision: main
+    path: apps/homolog/app-demo-api
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: homolog
+  syncPolicy:
+    automated:
+      allowEmpty: false
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - Validate=true
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
