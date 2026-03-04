@@ -21,7 +21,12 @@ nodes:
     hostPort: 8080
     listenAddress: "0.0.0.0"
     protocol: TCP
-- role: worker
+# - role: worker
 # - role: worker
 
-#  kind create cluster --config config.yaml --name cluster --kubeconfig config
+#### Instructions to create and delete the cluster, and to check cluster info: #####
+
+
+# kind create cluster --config config.yaml --name k8s --kubeconfig config
+# kind delete cluster -n k8s
+# kubectl cluster-info --context kind-k8s

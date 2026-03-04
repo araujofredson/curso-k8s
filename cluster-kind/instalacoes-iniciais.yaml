@@ -1,0 +1,7 @@
+# MetalLB: 
+# MetalLB é uma implementação de LoadBalancer para Kubernetes, que permite expor serviços do tipo LoadBalancer em clusters que não possuem suporte nativo para isso, como o Kind. Ele funciona alocando endereços IP para os serviços e encaminhando o tráfego para os pods correspondentes.
+# Para instalar o MetalLB, você pode usar o seguinte comando:
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.15.3/config/manifests/metallb-native.yaml
+
+2. criar o recurso: 
+curso-k8s/metallb/manifests.yaml
